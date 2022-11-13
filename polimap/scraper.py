@@ -38,7 +38,7 @@ def get_all_countries():
                         
             party_info =party.find('b')
             #print(party_info)
-            print(country, party_info)
+            #print(country, party_info)
 
             # ruling party has not link (usually independants)
             if party_info != None:
@@ -58,5 +58,7 @@ def get_all_countries():
             
             #print('PARTY', ruling_party)
             out_list.append((country, ruling_party, link))
+    return out_list
 
-get_all_countries()
+
+print(get_all_countries())
