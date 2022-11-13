@@ -62,5 +62,24 @@ def get_all_countries():
             out_list.append((country, ruling_party, link))
     return out_list
 
-#get_all_countries()
-print(get_all_countries())
+
+# ('Mauritius', 'Militant Socialist Movement', '/wiki/Militant_Socialist_Movement')
+
+def get_political_position(url):
+    BASE_URL = 'https://en.wikipedia.org'
+    
+    url = BASE_URL + url
+    
+    response_content = re.get(url).content
+    
+    soup = BeautifulSoup(response_content, 'html.parser')
+    
+    side_table = soup.find('table')
+    
+    political_position_header = side_table.find('a', title="Political spectrum")
+    
+    political_position = political_position_header.parent.parent.find('td').find('a').text
+    
+    return political_position
+    
+get_political_position('/wiki/Militant_Socialist_Movement')
