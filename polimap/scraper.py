@@ -42,11 +42,13 @@ def get_all_countries():
 
             # ruling party has not link (usually independants)
             if party_info != None:
-                if party_info.text != None:
+                if party_info.find('a') == None:
+                    #print(party_info)
                     ruling_party = party_info.text
                     link = None
                 else:
-                    ruling_party = party_info.find('a').get('title', 'No Parties')
+                    #print(party_info)
+                    ruling_party = party_info.find('a').get('title')
                     link = party_info.find('a')['href']
                
             else:
@@ -60,5 +62,5 @@ def get_all_countries():
             out_list.append((country, ruling_party, link))
     return out_list
 
-
+#get_all_countries()
 print(get_all_countries())
