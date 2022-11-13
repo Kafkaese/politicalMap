@@ -3,29 +3,60 @@ from bs4 import BeautifulSoup
 
 
 def get_all_countries():
+    '''
+    Scrapes wikipedias list of ruling parties by country.
     
+    Returns a list of tuples containing:
+        COUNTRY NAME: name of the counry
+        RULING PARTY: the name of the ruling or dominant party 
+        LINK: link to the corresponding wikipedia page of RULING PARTY
+    '''
 
     res = re.get('https://en.wikipedia.org/wiki/List_of_ruling_political_parties_by_country').content
 
     soup = BeautifulSoup(res, 'html.parser')
 
-    tables = soup.find_all('tbody')[6:] 
+    # tables for every letter, starts at index 6 due o other tables present on page
+    tables = soup.find_all('tbody')[4:] 
 
+    out_list = []
+    
+    # iterate over tables
     for table in tables:
-        rows = table.find_all('tr')[1] # index 0 is header
+        
+        # get the rows i.e countries in this table
+        rows = table.find_all('tr')[1:] # index 0 is header
 
-        countries = rows.find_all('td')[0].find('a').text
-        parties = rows.find_all('td')[2]
+        # ierate over all the countries in this table
+        for row in rows:
+            
+            # country name
+            country = row.find_all('td')[0].find('a').text
+            
+            # party info
+            party = row.find_all('td')[2]
+                        
+            party_info =party.find('b')
+            #print(party_info)
+            print(country, party_info)
 
-        party_info =parties.find('b')
-        #print(party_info)
-        
-        ruling_party = party_info.find('a').get('title', 'No Parties') if party_info != None else None
-        
-        # For non partisan political systems
-        link = party_info.find('a')['href'] if party_info != None else None
-        
-        #print('PARTY', ruling_party)
-        print(countries, ruling_party, link)
+            # ruling party has not link (usually independants)
+            if party_info != None:
+                if party_info.text != None:
+                    ruling_party = party_info.text
+                    link = None
+                else:
+                    ruling_party = party_info.find('a').get('title', 'No Parties')
+                    link = party_info.find('a')['href']
+               
+            else:
+                ruling_party = 'No Parties'
+                link = None
+                
+                # For non partisan political systems and non-democracies ets
+                
+            
+            #print('PARTY', ruling_party)
+            out_list.append((country, ruling_party, link))
 
 get_all_countries()
