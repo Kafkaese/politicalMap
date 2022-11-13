@@ -59,7 +59,7 @@ def get_all_countries():
                 
             
             #print('PARTY', ruling_party)
-            out_list.append((country, ruling_party, link))
+            out_list.append({'country name': country, 'ruling party': ruling_party, 'url': link})
     return out_list
 
 
@@ -82,4 +82,5 @@ def get_political_position(url):
     
     return political_position
     
-get_political_position('/wiki/Militant_Socialist_Movement')
+def write_to_csv(data):
+    pass
