@@ -1,6 +1,6 @@
 import requests as re
 from bs4 import BeautifulSoup
-
+import csv
 
 def get_all_countries():
     '''
@@ -82,5 +82,23 @@ def get_political_position(url):
     
     return political_position
     
-def write_to_csv(data):
-    pass
+def write_to_csv():
+    data = get_all_countries()
+    
+    for country in data:
+        url = country['url']
+        print(country)
+        country['position'] = get_political_position(country['url']) if url != None else None
+    
+    with open('data/countries.csv', 'w') as file:
+        
+        header = data[0].keys()
+        
+        writer = csv.DictWriter(file, fieldnames=header)
+        
+        writer.writeheader()
+        
+        for row in data:
+            writer.writerow(row)
+            
+write_to_csv()
