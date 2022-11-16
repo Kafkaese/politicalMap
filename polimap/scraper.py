@@ -1,6 +1,7 @@
 import requests as re
 from bs4 import BeautifulSoup
 import csv
+import urllib
 
 def get_all_countries():
     '''
@@ -16,7 +17,7 @@ def get_all_countries():
 
     soup = BeautifulSoup(res, 'html.parser')
 
-    # tables for every letter, starts at index 6 due o other tables present on page
+    # tables for every letter, starts at index 4 due o other tables present on page
     tables = soup.find_all('tbody')[4:] 
 
     out_list = []
@@ -69,16 +70,26 @@ def get_political_position(url):
     BASE_URL = 'https://en.wikipedia.org'
     
     url = BASE_URL + url
+   
+    #url = urllib.quote(url.encode('UTF-8')) 
+    
+    print(url)
     
     response_content = re.get(url).content
     
+    #print(response_content)
+    
     soup = BeautifulSoup(response_content, 'html.parser')
     
-    side_table = soup.find('table')
+    #print(soup)
+
+    political_position_header = soup.find('a', title="Political spectrum")
     
-    political_position_header = side_table.find('a', title="Political spectrum")
+    political_position = 'N/A'
     
-    political_position = political_position_header.parent.parent.find('td').find('a').text
+    if political_position_header:
+        political_position = political_position_header.parent.parent.find('td').find('a').text
+    
     
     return political_position
     
