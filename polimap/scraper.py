@@ -1,7 +1,7 @@
 import requests as re
 from bs4 import BeautifulSoup
 import csv
-import urllib
+import datetime
 
 def get_all_countries():
     '''
@@ -101,7 +101,9 @@ def write_to_csv():
         print(country)
         country['position'] = get_political_position(country['url']) if url != None else None
     
-    with open('data/countries.csv', 'w') as file:
+    timestamp = str(datetime.datetime.now().date())
+    
+    with open(f'data/countries_{timestamp}.csv', 'w') as file:
         
         header = data[0].keys()
         
