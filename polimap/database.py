@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-
+import os
 
 def create_connection(db_file):
     """ create a database connection to a SQLite database """
@@ -16,4 +16,7 @@ def create_connection(db_file):
 
 
 if __name__ == '__main__':
-    create_connection("../data/databases/wiki.db")
+    #
+    #print(os.path.dirname(__file__))
+    #print(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
+    create_connection(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
