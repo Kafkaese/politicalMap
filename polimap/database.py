@@ -17,27 +17,29 @@ def create_connection(db_file):
 
 def write_all_countries_to_db(csv_path):
     
+    
     try:
  
         # Import csv and extract data
         with open(csv_path, 'r') as fin:
             dr = csv.DictReader(fin)
-            country_info = [(i['country'], i['name'], i['ruling party'], i['url'], i['position']) for i in dr]
-            print(country_info)
+            country_info = [(i['country name'], i['ruling party'], i['url'], i['position']) for i in dr]
+            #print(country_info)
     
         # Connect to SQLite
         sqliteConnection = sqlite3.connect(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
         cursor = sqliteConnection.cursor()
     
-        # Create student table 
-        cursor.execute('create table country(name varchar2(10), age int);') # <----- CONTINUE HERE
+        # Create country table 
+        cursor.execute('drop table country')
+        cursor.execute('create table country(country TEXT, party TEXT, url TEXT, position TEXT);') 
     
         # Insert data into table
         cursor.executemany(
-            "insert into student (name, age) VALUES (?, ?);", student_info)
+            "insert into country (country, party, url, position) VALUES (?, ?, ?, ?);", country_info)
     
         # Show student table
-        cursor.execute('select * from student;')
+        cursor.execute('select * from country;')
     
         # View result
         result = cursor.fetchall()
@@ -55,7 +57,7 @@ def write_all_countries_to_db(csv_path):
             sqliteConnection.close()
             print('SQLite Connection closed')
 
-def instert_country(conn, country):
+def insert_country(conn, country):
     """
     Create a new task
     :param conn:
@@ -63,17 +65,19 @@ def instert_country(conn, country):
     :return:
     """
 
-    sql = ''' INSERT INTO tasks(name,priority,status_id,project_id,begin_date,end_date)
-              VALUES(?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO country(country, party, url, position)
+              VALUES(?,?,?,?) '''
     cur = conn.cursor()
-    cur.execute(sql, task)
+    cur.execute(sql, country)
     conn.commit()
 
     return cur.lastrowid
 
 
 if __name__ == '__main__':
-    #
+    csv_path = f"{os.path.dirname(__file__)}/../data/csv/countries.csv"
+    database_path = f"{os.path.dirname(__file__)}/../data/databases/wiki.db"
     #print(os.path.dirname(__file__))
     #print(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
-    create_connection(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
+#    create_connection(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
+    write_all_countries_to_db(csv_path=csv_path)
