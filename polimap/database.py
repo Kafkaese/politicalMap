@@ -15,7 +15,7 @@ def create_connection(db_file):
         if conn:
             conn.close()
 
-def write_all_countries_to_db(csv_path):
+def write_all_countries_to_db(db_path, csv_path):
     
     
     try:
@@ -27,7 +27,8 @@ def write_all_countries_to_db(csv_path):
             #print(country_info)
     
         # Connect to SQLite
-        sqliteConnection = sqlite3.connect(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
+        #sqliteConnection = sqlite3.connect(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
+        sqliteConnection = sqlite3.connect(database=db_path)
         cursor = sqliteConnection.cursor()
     
         # Create country table 
@@ -80,4 +81,7 @@ if __name__ == '__main__':
     #print(os.path.dirname(__file__))
     #print(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
 #    create_connection(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
-    write_all_countries_to_db(csv_path=csv_path)
+    #write_all_countries_to_db(csv_path=csv_path)
+    sqliteConnection = sqlite3.connect(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
+    cursor = sqliteConnection.cursor()
+    insert_country(sqliteConnection, ('name', 'party', 'pos', 'url.de'))
