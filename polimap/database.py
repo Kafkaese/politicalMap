@@ -58,20 +58,33 @@ def write_all_countries_to_db(db_path, csv_path):
             sqliteConnection.close()
             print('SQLite Connection closed')
 
-def insert_country(conn, country):
+def insert_country(db_path, country):
     """
     Create a new task
     :param conn:
     :param task:
     :return:
     """
-
-    sql = ''' INSERT INTO country(country, party, url, position)
-              VALUES(?,?,?,?) '''
-    cur = conn.cursor()
-    cur.execute(sql, country)
-    conn.commit()
-
+    try:
+        # Connect to SQLite
+        conn = sqlite3.connect(database=db_path)
+        
+        
+        sql = ''' INSERT INTO country(country, party, url, position)
+                VALUES(?,?,?,?) '''
+        
+        cur = conn.cursor()
+        cur.execute(sql, country)
+        conn.commit()
+    
+    except sqlite3.Error as error:
+        print('Error occurred - ', error)
+    
+    finally:
+        if conn:
+            conn.close()
+            print('SQLite Connection closed')
+    
     return cur.lastrowid
 
 
@@ -80,8 +93,6 @@ if __name__ == '__main__':
     database_path = f"{os.path.dirname(__file__)}/../data/databases/wiki.db"
     #print(os.path.dirname(__file__))
     #print(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
-#    create_connection(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
-    #write_all_countries_to_db(csv_path=csv_path)
-    sqliteConnection = sqlite3.connect(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
-    cursor = sqliteConnection.cursor()
-    insert_country(sqliteConnection, ('name', 'party', 'pos', 'url.de'))
+    #create_connection(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
+    write_all_countries_to_db(db_path=database_path, csv_path=csv_path)
+    insert_country(database_path, ('name', 'party', 'pos', 'url.de'))
