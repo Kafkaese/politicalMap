@@ -15,7 +15,7 @@ def create_connection(db_file):
         if conn:
             conn.close()
 
-def write_all_countries_to_db(db_path, csv_path):
+def write_all_countries_to_db(db_path, csv_path, verbose = False):
     
     
     try:
@@ -40,7 +40,8 @@ def write_all_countries_to_db(db_path, csv_path):
             "insert into country (country, party, url, position) VALUES (?, ?, ?, ?);", country_info)
     
         # Show student table
-        cursor.execute('select * from country;')
+        if verbose:
+            cursor.execute('select * from country;')
     
         # View result
         result = cursor.fetchall()
@@ -95,4 +96,4 @@ if __name__ == '__main__':
     #print(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
     #create_connection(f"{os.path.dirname(__file__)}/../data/databases/wiki.db")
     write_all_countries_to_db(db_path=database_path, csv_path=csv_path)
-    insert_country(database_path, ('name', 'party', 'pos', 'url.de'))
+    #insert_country(database_path, ('name', 'party', 'pos', 'url.de'))
