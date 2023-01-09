@@ -103,7 +103,7 @@ def write_to_csv():
     
     timestamp = str(datetime.datetime.now().date())
     
-    with open(f'data/countries_{timestamp}.csv', 'w') as file:
+    with open(f'data/csv/countries_{timestamp}.csv', 'w') as file:
         
         header = data[0].keys()
         
