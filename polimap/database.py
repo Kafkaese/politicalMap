@@ -88,6 +88,7 @@ def insert_country(db_path, country):
     
     return cur.lastrowid
 
+    
 
 if __name__ == '__main__':
     csv_path = f"{os.path.dirname(__file__)}/../data/csv/countries.csv"
